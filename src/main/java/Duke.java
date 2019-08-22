@@ -21,7 +21,7 @@ public class Duke {
         input = scan.nextLine();
         int counter = 0;
         while(!input.equals("bye")){
-
+            Task t = new Task(input);
             //List all saved contents in array
             if(input.equals("list")){
                 for(int i=0; i<array.size(); i++)
@@ -32,17 +32,17 @@ public class Duke {
             else{
                 //To mark as done
                 if(input.length()>4 && input.substring(0,4).equals("done")){
-                    String digit = input.replace("done ", "");
-                    int num = Integer.parseInt(digit);
-                    checkbox.set(num-1, "\u2713");
+                    t.markAsDone(); //Task
+                    String digit = input.replace("done ", "");  //Cut "done 1" to "1"
+                    int num = Integer.parseInt(digit);  //Save 1 as int
+                    checkbox.set(num-1, t.getStatusIcon());      //set checkbox array as checked for tat task
                     System.out.println("Nice! I've marked this task as done: ");
-                    System.out.println("[\u2713] " + array.get(num-1));
-
+                    System.out.println("[" + t.getStatusIcon()+ "] " + array.get(num-1));   //[check] task
                 }
                 //To add more tasks into array
                 else{
                     array.add(counter, input);
-                    checkbox.add(counter, "\u2718");
+                    checkbox.add(counter, t.markAsUncompleted());
                     counter++;
                     System.out.println("added: " + input);
                 }
@@ -50,22 +50,5 @@ public class Duke {
             input = scan.nextLine();
         }
         System.out.println("Bye. Hope to see you again soon!");
-    }
-    public class Task {
-        protected String description;
-        protected boolean isDone;
-
-        public Task(String description, boolean isDone) {
-            this.description = description;
-            this.isDone = false;
-        }
-
-        public String getStatusIcon() {
-            return (isDone ? "\u2713" : "\u2718"); //return tick or X symbols
-        }
-
-        public String markAsDone(){
-            return "\u2713";
-        }
     }
 }
