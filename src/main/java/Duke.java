@@ -30,6 +30,7 @@ public class Duke {
 
             //Check for whether user wants to mark as done or add more input
             else{
+                //To mark as done
                 if(input.length()>4 && input.substring(0,4).equals("done")){
                     String digit = input.replace("done ", "");
                     int num = Integer.parseInt(digit);
@@ -38,6 +39,7 @@ public class Duke {
                     System.out.println("[\u2713] " + array.get(num-1));
 
                 }
+                //To add more tasks into array
                 else{
                     array.add(counter, input);
                     checkbox.add(counter, "\u2718");
@@ -48,5 +50,22 @@ public class Duke {
             input = scan.nextLine();
         }
         System.out.println("Bye. Hope to see you again soon!");
+    }
+    public class Task {
+        protected String description;
+        protected boolean isDone;
+
+        public Task(String description, boolean isDone) {
+            this.description = description;
+            this.isDone = false;
+        }
+
+        public String getStatusIcon() {
+            return (isDone ? "\u2713" : "\u2718"); //return tick or X symbols
+        }
+
+        public String markAsDone(){
+            return "\u2713";
+        }
     }
 }
