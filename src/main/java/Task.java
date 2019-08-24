@@ -11,6 +11,10 @@ public class Task {
         this.description = description;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public String getStatusIcon() {
         return (isDone ? "\u2713" : "\u2718"); //return tick or X symbols
     }
@@ -19,7 +23,8 @@ public class Task {
         this.isDone = true;
     }
 
-    public String markAsUncompleted(){
-        return "\u2718";
+    @Override
+    public String toString(){
+        return "[" + getStatusIcon() + "] " + this.description;
     }
 }
