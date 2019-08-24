@@ -31,7 +31,7 @@ public class Duke {
 
             //Check for whether user wants to mark as done or add more input
             else{
-                //Done, deadline, event, to do
+                //Done, to do, deadline, event
                 String[] command = input.split(" ", 2);
                 switch(command[0]) {
                     case "done":
