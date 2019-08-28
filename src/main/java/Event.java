@@ -1,4 +1,6 @@
-public class Event extends Task {
+import java.io.Serializable;
+
+public class Event extends Task implements Serializable {
     protected String date;
 
     public Event(String description, String date) {   //eventBy[0], time[1]

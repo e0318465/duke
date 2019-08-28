@@ -1,7 +1,11 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Duke {
     public static void main(String[] args) {
+        ArrayList<Task> tasks = new ArrayList<>();
+        tasks = Data.loadTask(tasks);
+
         String logo = " ____        _        \n"
                 + "|  _ \\ _   _| | _____ \n"
                 + "| | | | | | | |/ / _ \\\n"
@@ -12,17 +16,17 @@ public class Duke {
         System.out.println("Hello! I'm Duke");
         System.out.println("What can I do for you?");
 
-        Task[] tasks = new Task[100];
-
         String input;
         Scanner scan = new Scanner( System.in );
         input = scan.nextLine();
-        int counter = 0;
         while(!input.equals("bye")){
             if(input.equals("list")){       //List all tasks
                 System.out.println("Here are the tasks in your list:");
-                for(int j=0; j<counter; j++)
-                    System.out.println((j+1) + "." + tasks[j].toString());
+                int i=0;
+                for(Task thisTask : tasks) {
+                    System.out.println((i + 1) + "." + thisTask);
+                    i++;
+                }
             }
 
             else{                           //Check for other commands
@@ -36,9 +40,10 @@ public class Duke {
                         }
 
                         int choice = Integer.parseInt(command[1]);
-                        tasks[choice-1].markAsDone();
+                        tasks.get(choice-1).markAsDone();
                         System.out.println("Nice! I've marked this task as done: ");
-                        System.out.println(tasks[choice-1].toString());
+                        System.out.println(tasks.get(choice-1).toString());
+                        Data.saveTask(tasks);
                         break;
 
                     case "todo":
@@ -47,11 +52,12 @@ public class Duke {
                             break;
                         }
 
-                        tasks[counter] = new Todo(command[1]);
+                        Task todo = new Todo(command[1]);
+                        tasks.add(todo);
                         System.out.println("Got it. I've added this task: ");
-                        System.out.println(tasks[counter].toString());
-                        counter++;
-                        System.out.println("Now you have " + counter + " tasks in the list.");
+                        System.out.println(todo.toString());
+                        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                        Data.saveTask(tasks);
                         break;
 
                     case "deadline":
@@ -70,11 +76,12 @@ public class Duke {
                         }
 
                         String[] day = taskBy[1].split(" ", 2);     //"by" & "Sunday"
-                        tasks[counter] = new Deadline(taskBy[0], day[1]);
+                        Task deadline = new Deadline(taskBy[0], day[1]);
+                        tasks.add(deadline);
                         System.out.println("Got it. I've added this task: ");
-                        System.out.println(tasks[counter].toString());
-                        counter++;
-                        System.out.println("Now you have " + counter + " tasks in the list.");
+                        System.out.println(deadline.toString());
+                        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                        Data.saveTask(tasks);
                         break;
 
                     case "event":
@@ -93,10 +100,11 @@ public class Duke {
                         }
                         String[] time = eventBy[1].split(" ", 2);
 
-                        tasks[counter] = new Event(eventBy[0], time[1]);
-                        System.out.println("Got it. I've added this task: \n" + tasks[counter].toString());
-                        counter++;
-                        System.out.println("Now you have " + counter + " tasks in the list.");
+                        Task event = new Event(eventBy[0], time[1]);
+                        tasks.add(event);
+                        System.out.println("Got it. I've added this task: \n" + event.toString());
+                        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                        Data.saveTask(tasks);
                         break;
 
                     default:

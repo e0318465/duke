@@ -1,4 +1,6 @@
-public class Deadline extends Task {
+import java.io.Serializable;
+
+public class Deadline extends Task implements Serializable {
     protected String day;
 
     public Deadline(String description, String day) {    //taskBy[0], day[1]
