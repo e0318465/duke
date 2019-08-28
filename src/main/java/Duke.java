@@ -1,8 +1,11 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 public class Duke {
-    public static void main(String[] args) {
+    public static void main(String[] args){
         ArrayList<Task> tasks = new ArrayList<>();
         tasks = Data.loadTask(tasks);
 
@@ -15,6 +18,8 @@ public class Duke {
 
         System.out.println("Hello! I'm Duke");
         System.out.println("What can I do for you?");
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HHmm");    //Date format which user needs to input as
 
         String input;
         Scanner scan = new Scanner( System.in );
@@ -29,7 +34,7 @@ public class Duke {
                 }
             }
 
-            else{                           //Check for other commands
+            else{   //Check for other commands
                 //Done, to do, deadline, event
                 String[] command = input.split(" ", 2);
                 switch(command[0]) {
@@ -70,18 +75,23 @@ public class Duke {
                             break;
                         }
 
-                        String[] taskBy = command[1].split("/", 2); //"return book" & "by Sunday"
+                        String[] taskBy = command[1].split("/", 2); //taskBy[0] & taskBy[1] - "return book" & "by 2/12/2019 1800"
                         if(!taskBy[1].contains("by")){
                             taskBy[1] = "by " + taskBy[1];
                         }
 
-                        String[] day = taskBy[1].split(" ", 2);     //"by" & "Sunday"
-                        Task deadline = new Deadline(taskBy[0], day[1]);
-                        tasks.add(deadline);
-                        System.out.println("Got it. I've added this task: ");
-                        System.out.println(deadline.toString());
-                        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-                        Data.saveTask(tasks);
+                        String[] day = taskBy[1].split(" ", 2);     //"by" & "2/12/2019 1800"
+                        try{
+                            Date due = simpleDateFormat.parse(day[1]);
+                            Task deadlineDate = new Deadline(taskBy[0], due);
+                            tasks.add(deadlineDate);
+                            System.out.println("Got it. I've added this task: ");
+                            System.out.println(deadlineDate);   //Auto called Task toString (we override toString to give output we want)
+                            System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                            Data.saveTask(tasks);
+                        } catch(ParseException except){
+                            System.out.println("☹ Deadline to be in this format: DD/MM/YYYY HHmm");
+                        }
                         break;
 
                     case "event":
@@ -114,6 +124,7 @@ public class Duke {
             }
             input = scan.nextLine();
         }
+
         System.out.println("Bye. Hope to see you again soon!");
     }
 }
