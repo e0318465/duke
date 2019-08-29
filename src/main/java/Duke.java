@@ -117,6 +117,15 @@ public class Duke {
                         Data.saveTask(tasks);
                         break;
 
+                    case "delete":
+                        int lineToDelete = Integer.parseInt(command[1]);
+                        System.out.println("Noted. I've removed this task: ");
+                        System.out.println(tasks.get(lineToDelete-1));
+                        tasks.remove(lineToDelete-1);
+                        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                        Data.saveTask(tasks);
+                        break;
+
                     default:
                         System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
                         break;
