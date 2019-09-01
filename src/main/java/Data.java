@@ -11,7 +11,7 @@ public class Data{
             fileIn.close();
         }
         catch (FileNotFoundException f) {   //Creates a new file if there are none found
-            System.out.println("New file created");
+            //System.out.println("New file created");
             File file = new File("./dukeData");
         }
         catch (IOException i) {
@@ -32,7 +32,7 @@ public class Data{
             objectOut.writeObject(taskList);
             objectOut.close();
             fileOut.close();
-            System.out.println("Saved data");
+            //System.out.println("Saved data");
         }
 
         catch (IOException i) {
