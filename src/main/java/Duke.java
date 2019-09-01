@@ -126,6 +126,25 @@ public class Duke {
                         Data.saveTask(tasks);
                         break;
 
+                    case "find":
+                        ArrayList<Task> searchResult = new ArrayList<>();
+                        int count = 1;
+                        for (Task curTask : tasks){
+                            if(curTask.description.contains(command[1])){
+                                searchResult.add(curTask);
+                            }
+                        }
+                        if(searchResult.size() == 0){
+                            System.out.println("No match found");
+                            break;
+                        }
+                        System.out.println("Here are the matching tasks in your list:");
+                        for (Task search : searchResult) {
+                            System.out.print(count + "." + search + "\n");
+                            count++;
+                        }
+                        break;
+
                     default:
                         System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
                         break;
