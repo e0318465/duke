@@ -6,19 +6,12 @@ import java.util.Scanner;
 
 public class Duke {
     public static void main(String[] args){
+        Ui ui = new Ui();
+
         ArrayList<Task> tasks = new ArrayList<>();
         tasks = Data.loadTask(tasks);
 
-        String logo = " ____        _        \n"
-                + "|  _ \\ _   _| | _____ \n"
-                + "| | | | | | | |/ / _ \\\n"
-                + "| |_| | |_| |   <  __/\n"
-                + "|____/ \\__,_|_|\\_\\___|\n";
-        System.out.println("Hello from\n" + logo);
-
-        System.out.println("Hello! I'm Duke");
-        System.out.println("What can I do for you?");
-
+        ui.dukeMsg();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HHmm");    //Date format which user needs to input as
 
         String input;
@@ -40,7 +33,7 @@ public class Duke {
                 switch(command[0]) {
                     case "done":
                         if(input.equals("done")) {
-                            System.out.println("☹ OOPS!!! The description of a done cannot be empty.");
+                            ui.errorMsg("done");
                             break;
                         }
 
@@ -53,7 +46,7 @@ public class Duke {
 
                     case "todo":
                         if(input.equals("todo")) {
-                            System.out.println("☹ OOPS!!! The description of a todo cannot be empty.");
+                            ui.errorMsg("todo");
                             break;
                         }
 
@@ -67,11 +60,11 @@ public class Duke {
 
                     case "deadline":
                         if(input.equals("deadline")){
-                            System.out.println("☹ OOPS!!! The description of a deadline cannot be empty.");
+                            ui.errorMsg("deadline");
                             break;
                         }
                         if(!command[1].contains("/")){
-                            System.out.println("☹ OOPS!!! The description of a deadline needs a '/' to separate description and day");
+                            ui.slashErrorMsg();
                             break;
                         }
 
@@ -96,11 +89,11 @@ public class Duke {
 
                     case "event":
                         if(input.equals("event")) {
-                            System.out.println("☹ OOPS!!! The description of an event cannot be empty.");
+                            ui.errorMsg("event");
                             break;
                         }
                         if(!command[1].contains("/")){
-                            System.out.println("☹ OOPS!!! The description of an event needs a '/' to separate description and time");
+                            ui.slashErrorMsg();
                             break;
                         }
 
@@ -146,13 +139,13 @@ public class Duke {
                         break;
 
                     default:
-                        System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
+                        ui.defaultErrorMsg();
                         break;
                 }
             }
             input = scan.nextLine();
         }
 
-        System.out.println("Bye. Hope to see you again soon!");
+        ui.byeMsg();
     }
 }
