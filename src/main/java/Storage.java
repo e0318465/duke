@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 
-public class Data{
+public class Storage {
     public static ArrayList<Task> loadTask(ArrayList<Task> log) {
         try {
             FileInputStream fileIn = new FileInputStream("./dukeData");

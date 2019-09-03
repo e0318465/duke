@@ -2,23 +2,24 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Scanner;
 
 public class Duke {
     public static void main(String[] args){
         Ui ui = new Ui();
+        Parser parser = new Parser();
+        TaskList taskList;
 
-        ArrayList<Task> tasks = new ArrayList<>();
-        tasks = Data.loadTask(tasks);
-
-        ui.dukeMsg();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HHmm");    //Date format which user needs to input as
+        ArrayList<Task> tasks = new ArrayList<>();
+        tasks = Storage.loadTask(tasks);
+        taskList = new TaskList(tasks); //curList
+        ui.dukeMsg();
 
-        String input;
-        Scanner scan = new Scanner( System.in );
-        input = scan.nextLine();
+        String input = parser.scanInput();
+
         while(!input.equals("bye")){
-            if(input.equals("list")){       //List all tasks
+
+            if(input.equals("list")){
                 System.out.println("Here are the tasks in your list:");
                 int i=0;
                 for(Task thisTask : tasks) {
@@ -27,21 +28,19 @@ public class Duke {
                 }
             }
 
-            else{   //Check for other commands
-                //Done, to do, deadline, event
-                String[] command = input.split(" ", 2);
-                switch(command[0]) {
+            else{
+                switch(parser.firstCommand()) {
                     case "done":
                         if(input.equals("done")) {
                             ui.errorMsg("done");
                             break;
                         }
 
-                        int choice = Integer.parseInt(command[1]);
+                        int choice = Integer.parseInt(parser.secondCommand());
                         tasks.get(choice-1).markAsDone();
                         System.out.println("Nice! I've marked this task as done: ");
                         System.out.println(tasks.get(choice-1).toString());
-                        Data.saveTask(tasks);
+                        Storage.saveTask(tasks);
                         break;
 
                     case "todo":
@@ -50,12 +49,9 @@ public class Duke {
                             break;
                         }
 
-                        Task todo = new Todo(command[1]);
-                        tasks.add(todo);
-                        System.out.println("Got it. I've added this task: ");
-                        System.out.println(todo.toString());
-                        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-                        Data.saveTask(tasks);
+                        Task todo = new Todo(parser.secondCommand());
+                        taskList.add(todo);
+                        Storage.saveTask(tasks);
                         break;
 
                     case "deadline":
@@ -63,25 +59,19 @@ public class Duke {
                             ui.errorMsg("deadline");
                             break;
                         }
-                        if(!command[1].contains("/")){
+                        if(!parser.secondCommand().contains("/")){
                             ui.slashErrorMsg();
                             break;
                         }
 
-                        String[] taskBy = command[1].split("/", 2); //taskBy[0] & taskBy[1] - "return book" & "by 2/12/2019 1800"
-                        if(!taskBy[1].contains("by")){
-                            taskBy[1] = "by " + taskBy[1];
-                        }
-
-                        String[] day = taskBy[1].split(" ", 2);     //"by" & "2/12/2019 1800"
                         try{
-                            Date due = simpleDateFormat.parse(day[1]);
-                            Task deadlineDate = new Deadline(taskBy[0], due);
+                            Date due = simpleDateFormat.parse(parser.secondDay());
+                            Task deadlineDate = new Deadline(parser.firstTaskBy(), due);
                             tasks.add(deadlineDate);
                             System.out.println("Got it. I've added this task: ");
                             System.out.println(deadlineDate);   //Auto called Task toString (we override toString to give output we want)
                             System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-                            Data.saveTask(tasks);
+                            Storage.saveTask(tasks);
                         } catch(ParseException except){
                             System.out.println("☹ Deadline to be in this format: DD/MM/YYYY HHmm");
                         }
@@ -92,50 +82,25 @@ public class Duke {
                             ui.errorMsg("event");
                             break;
                         }
-                        if(!command[1].contains("/")){
+                        if(!parser.secondCommand().contains("/")){
                             ui.slashErrorMsg();
                             break;
                         }
 
-                        String[] eventBy = command[1].split("/", 2);
-                        if(!eventBy[1].contains("at")){
-                            eventBy[1] = "at " + eventBy[1];
-                        }
-                        String[] time = eventBy[1].split(" ", 2);
-
-                        Task event = new Event(eventBy[0], time[1]);
+                        Task event = new Event(parser.firstEvent(), parser.time2());
                         tasks.add(event);
                         System.out.println("Got it. I've added this task: \n" + event.toString());
                         System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-                        Data.saveTask(tasks);
+                        Storage.saveTask(tasks);
                         break;
 
                     case "delete":
-                        int lineToDelete = Integer.parseInt(command[1]);
-                        System.out.println("Noted. I've removed this task: ");
-                        System.out.println(tasks.get(lineToDelete-1));
-                        tasks.remove(lineToDelete-1);
-                        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-                        Data.saveTask(tasks);
+                        taskList.delete(parser.deleteTask());   //delete task according to number
+                        Storage.saveTask(tasks);
                         break;
 
                     case "find":
-                        ArrayList<Task> searchResult = new ArrayList<>();
-                        int count = 1;
-                        for (Task curTask : tasks){
-                            if(curTask.description.contains(command[1])){
-                                searchResult.add(curTask);
-                            }
-                        }
-                        if(searchResult.size() == 0){
-                            System.out.println("No match found");
-                            break;
-                        }
-                        System.out.println("Here are the matching tasks in your list:");
-                        for (Task search : searchResult) {
-                            System.out.print(count + "." + search + "\n");
-                            count++;
-                        }
+                        taskList.find(parser.secondCommand());
                         break;
 
                     default:
@@ -143,9 +108,8 @@ public class Duke {
                         break;
                 }
             }
-            input = scan.nextLine();
+            input = parser.scanInput();
         }
-
         ui.byeMsg();
     }
 }
