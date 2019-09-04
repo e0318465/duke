@@ -81,7 +81,7 @@ public class Duke {
                     break;
 
                 case "delete":
-                    taskList.delete(parser.deleteTask());
+                    taskList.delete(parser.deleteTask());   //delete task according to number
                     Storage.saveTask(tasks);
                     break;
 
