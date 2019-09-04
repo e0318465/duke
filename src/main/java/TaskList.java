@@ -25,12 +25,8 @@ public class TaskList {
         ArrayList<Task> searchResult = new ArrayList<>();
         int count = 1;
         for (Task curTask : doTask){
-            if(curTask.description.contains(command)){
+            if(curTask.description.contains(command))
                 searchResult.add(curTask);
-            }
-        }
-        if(searchResult.size() == 0){
-            System.out.println("No match found");
         }
         System.out.println("Here are the matching tasks in your list:");
         for (Task search : searchResult) {
