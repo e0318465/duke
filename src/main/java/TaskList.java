@@ -38,4 +38,27 @@ public class TaskList {
             count++;
         }
     }
+
+    public void list() {
+        System.out.println("Here are the tasks in your list:");
+        int i = 0;
+        for (Task thisTask : doTask) {
+            System.out.println((i + 1) + "." + thisTask);
+            i++;
+        }
+    }
+
+    public void done(String secondCommand) {
+        int choice = Integer.parseInt(secondCommand);
+        doTask.get(choice - 1).markAsDone();
+        System.out.println("Nice! I've marked this task as done: ");
+        System.out.println(doTask.get(choice - 1).toString());
+        Storage.saveTask(doTask);
+    }
+
+    public void todo(String secondCommand) {
+        Task todo = new Todo(secondCommand);
+        add(todo);
+        Storage.saveTask(doTask);
+    }
 }
