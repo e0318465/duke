@@ -7,3 +7,5 @@ Hello from
 
 Hello! I'm Duke
 What can I do for you?
+Here are the tasks in your list:
+1.[T][?] this
