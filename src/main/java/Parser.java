@@ -5,7 +5,8 @@ public class Parser {
     protected String input;
 
     public String scanInput(){  //deadline return book /by 7/6/2019 1700
-        return this.input = scan.nextLine();
+        return this.input = "bye";
+//        return this.input = scan.nextLine();
     }
 
     public String firstCommand(){   //deadline or event
