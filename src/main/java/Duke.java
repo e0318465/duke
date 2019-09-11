@@ -1,28 +1,41 @@
+/**
+ * Returns Duke on the screen as a welcome page and promotes input.
+ */
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class Duke {
+    /**
+     * Run duke
+     *
+     * @param args
+     */
     public static void main(String[] args){
         Ui ui = new Ui();
         Parser parser = new Parser();
         TaskList taskList;
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HHmm");    //Date format which user needs to input as
+        //Date format which user needs to input as
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HHmm");
         ArrayList<Task> tasks = new ArrayList<>();
         tasks = Storage.loadTask(tasks);
-        taskList = new TaskList(tasks); //curList
+        //curList
+        taskList = new TaskList(tasks);
         ui.dukeMsg();
 
         parser.scanInput();
 
         while(!parser.firstCommand().equals("bye")) {
             switch (parser.firstCommand()) {
+                //Lists all the task available
                 case "list":
                     taskList.list();
                     break;
 
+                //Marks task as done
                 case "done":
                     if (parser.secondCommand().equals("")) {
                         ui.errorMsg("done");
@@ -32,6 +45,7 @@ public class Duke {
                     taskList.done(parser.secondCommand());
                     break;
 
+                //Adds a new task into list
                 case "todo":
                     if (parser.secondCommand().equals("")) {
                         ui.errorMsg("todo");
@@ -40,6 +54,7 @@ public class Duke {
                     taskList.todo(parser.secondCommand());
                     break;
 
+                //Adds a new deadline to list
                 case "deadline":
                     if (parser.secondCommand().equals("")) {
                         ui.errorMsg("deadline");
@@ -63,6 +78,7 @@ public class Duke {
                     }
                     break;
 
+                //Adds a new event to list
                 case "event":
                     if (parser.secondCommand().equals("")) {
                         ui.errorMsg("event");
@@ -80,11 +96,13 @@ public class Duke {
                     Storage.saveTask(tasks);
                     break;
 
+                //Deleted a task from list
                 case "delete":
                     taskList.delete(parser.deleteTask());   //delete task according to number
                     Storage.saveTask(tasks);
                     break;
 
+                //Finds a keyword in the list
                 case "find":
                     taskList.find(parser.secondCommand());
                     break;
